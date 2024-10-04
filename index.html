@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Webpage</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+        }
+
+        .header {
+            background-color: #333;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: none; // flex
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .navbar li {
+            margin: 0 15px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 2px 1fr;
+            overflow: auto; /* To make the sidebar scrollable */
+        }
+
+        .sidebar {
+		/*
+            background-color: #f4f4f4;
+            padding: 20px;
+        */
+        }
+
+        .sidebar h2 {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin: 10px 0;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+
+        .main-content {
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+			display:none;
+        }
+
+        #students-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .student-card {
+            position: relative;
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            // overflow: hidden;
+            // background-color: #f0f0f0;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .student-card img {
+            width: 100%;
+            border-radius: 50%;
+            transition: opacity 0.3s;
+			border: 2px solid black;
+        }
+
+        .student-card:hover {
+            // background-color: #e0e0e0;
+        }
+
+        .student-card:hover img {
+            // opacity: 0; /* Hide initials image */
+			border:2px solid red;
+			cursor:pointer;
+        }
+
+        .student-card:hover .student-image {
+            display: block; /* Show picture avatar on hover */
+        }
+
+.tooltip {
+    display: none; /* Hide the tooltip by default */
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 75%; /* Position above the card */
+    left: 50%;
+    transform: translateX(-50%); /* Center the tooltip */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s;
+}
+
+.student-card:hover .tooltip {
+    display: block; /* Show the tooltip on hover */
+    opacity: 1; /* Fade in effect */
+}
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr; /* Stack the sidebar and content on top of each other */
+            }
+
+            .sidebar {
+                order: 1; /* Sidebar comes first on mobile */
+            }
+
+            .main-content {
+                order: 2; /* Main content comes second on mobile */
+            }
+
+            .navbar ul {
+                flex-direction: column; /* Stack navbar items vertically */
+            }
+
+            .navbar li {
+                margin: 5px 0; /* Add margin for spacing */
+            }
+        }
+		
+		
+		
+		
+		.present-button {
+    background-color: magenta;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    font-size: 36px;
+    cursor: pointer;
+    position: relative;
+    margin: 20px auto; /* Center the button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.present-button:hover {
+    background-color: darkmagenta; /* Darker shade on hover */
+}
+
+
+#presentation-message {
+    font-size: 36px; /* Increase font size */
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Fun font */
+    font-weight: bold; /* Make it bold */
+    text-align: center; /* Center the text */
+    background: linear-gradient(90deg, red, orange, yellow, green, blue, purple); /* Rainbow gradient */
+    -webkit-background-clip: text; /* Clip background to text */
+    -webkit-text-fill-color: transparent; /* Make text fill transparent */
+    margin-top: 20px; /* Space above the message */
+}
+
+
+
+#sidebar {
+    visibility: hidden; 
+    
+    opacity: 0; 
+    position: absolute;
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+			<div style="display:none;">
+            <h2>Sidebar</h2>
+            <ul>
+                <li><a href="#link1">Link 1</a></li>
+                <li><a href="#link2">Link 2</a></li>
+                <li><a href="#link3">Link 3</a></li>
+                <li><a href="#link4">Link 4</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h1>Cine prezinta</h1>
+            <p>Joc realizat in Javascript.</p>
+            <p><small>Simplu de folosit ! Dati click pe buton si aflati cine prezinta !!! </small></p>
+
+            <div id="students-container">
+                <!-- Student Cards will be generated here -->
+            </div>
+			
+			<button id="present-student-button" class="present-button">❓</button>
+<p id="presentation-message"></p>
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 NTT DATA ROMANIA. All rights reserved.</p>
+    </footer>
+
+    <script>
+      
+
+const students = [
+  { 
+    id: 1, 
+    name: "Andrei Calutiu", 
+    gender: "M", 
+    email: "ANDREI.CALUTIU@NTTDATA.COM", 
+    repo: "", 
+    uuid: "1a2b3c4d-1111-2222-3333-aaaaaaaaaaaa", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Andrei+Calutiu&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/1.jpg" 
+  },
+  { 
+    id: 2, 
+    name: "Calin Pavel", 
+    gender: "M", 
+    email: "CALIN.PAVEL@NTTDATA.COM", 
+    repo: "", 
+    uuid: "2b3c4d5e-1111-2222-3333-bbbbbbbbbbbb", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Calin+Pavel&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/2.jpg" 
+  },
+  { 
+    id: 3, 
+    name: "Adrian Schiop", 
+    gender: "M", 
+    email: "ADRIAN.SCHIOP@NTTDATA.COM", 
+    repo: "", 
+    uuid: "3c4d5e6f-1111-2222-3333-cccccccccccc", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Adrian+Schiop&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/3.jpg" 
+  },
+  { 
+    id: 4, 
+    name: "Robert Gengiu", 
+    gender: "M", 
+    email: "ROBERT.GENGIU@NTTDATA.COM", 
+    repo: "", 
+    uuid: "4d5e6f7g-1111-2222-3333-dddddddddddd", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Robert+Gengiu&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/4.jpg" 
+  },
+  { 
+    id: 5, 
+    name: "Antonia Gabriela Albu", 
+    gender: "F", 
+    email: "antonia.albu@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "5e6f7g8h-1111-2222-3333-eeeeeeeeeeee", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Antonia+Gabriela+Albu&background=random&size=128&gender=female", 
+    pictureAvatar: "https://randomuser.me/api/portraits/women/5.jpg" 
+  },
+  { 
+    id: 6, 
+    name: "Tudor Ovidiu Atodiresei", 
+    gender: "M", 
+    email: "tudor.atodiresei@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "6f7g8h9i-1111-2222-3333-ffffffffffff", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Tudor+Ovidiu+Atodiresei&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/6.jpg" 
+  },
+  { 
+    id: 7, 
+    name: "Francesco Maxim", 
+    gender: "M", 
+    email: "francesco.maxim@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "7g8h9i0j-1111-2222-3333-gggggggggggg", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Francesco+Maxim&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/7.jpg" 
+  },
+  { 
+    id: 8, 
+    name: "Ioana Matilda Negoita", 
+    gender: "F", 
+    email: "matilda.negoita@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "8h9i0j1k-1111-2222-3333-hhhhhhhhhhhh", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Ioana+Matilda+Negoita&background=random&size=128&gender=female", 
+    pictureAvatar: "https://randomuser.me/api/portraits/women/8.jpg" 
+  },
+  { 
+    id: 9, 
+    name: "Diana Maria Petrula", 
+    gender: "F", 
+    email: "diana.petrula@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "9i0j1k2l-1111-2222-3333-iiiiiiiiiiii", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Diana+Maria+Petrula&background=random&size=128&gender=female", 
+    pictureAvatar: "https://randomuser.me/api/portraits/women/9.jpg" 
+  },
+  { 
+    id: 10, 
+    name: "Andrei Bogdan Rosca", 
+    gender: "M", 
+    email: "andrei.rosca@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "0j1k2l3m-1111-2222-3333-jjjjjjjjjjjj", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Andrei+Bogdan+Rosca&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/10.jpg" 
+  },
+  { 
+    id: 11, 
+    name: "Larisa Raluca Spataru", 
+    gender: "F", 
+    email: "larisa.spataru@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "1k2l3m4n-1111-2222-3333-kkkkkkkkkkkk", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Larisa+Raluca+Spataru&background=random&size=128&gender=female", 
+    pictureAvatar: "https://randomuser.me/api/portraits/women/11.jpg" 
+  },
+  { 
+    id: 12, 
+    name: "Anna Marita Thuri", 
+    gender: "F", 
+    email: "anna.marita@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "2l3m4n5o-1111-2222-3333-llllllllllll", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Anna+Marita+Thuri&background=random&size=128&gender=female", 
+    pictureAvatar: "https://randomuser.me/api/portraits/women/12.jpg" 
+  },
+  { 
+    id: 13, 
+    name: "Mihai Ionut Tibrea", 
+    gender: "M", 
+    email: "mihai.tibrea@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "3m4n5o6p-1111-2222-3333-mmmmmmmmmmmm", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Mihai+Ionut+Tibrea&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/13.jpg" 
+  },
+  { 
+    id: 14, 
+    name: "Calin Iancu Ioan Muntean", 
+    gender: "M", 
+    email: "calin.muntean@emeal.nttdata.com", 
+    repo: "", 
+    uuid: "4n5o6p7q-1111-2222-3333-nnnnnnnnnnnn", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Calin+Iancu+Ioan+Muntean&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/14.jpg" 
+  },
+  { 
+    id: 15, 
+    name: "Andreea Megherlich", 
+    gender: "F", 
+    email: "ANDREEA.MEGHERLICH@NTTDATA.COM", 
+    repo: "", 
+    uuid: "5o6p7q8r-1111-2222-3333-oooooooooooo", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Andreea+Megherlich&background=random&size=128&gender=female", 
+    pictureAvatar: "https://randomuser.me/api/portraits/women/15.jpg" 
+  },
+  { 
+    id: 16, 
+    name: "Bogdan Draghici", 
+    gender: "M", 
+    email: "BOGDAN.DRAGHICI@NTTDATA.COM", 
+    repo: "", 
+    uuid: "6p7q8r9s-1111-2222-3333-pppppppppppp", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Bogdan+Draghici&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/16.jpg" 
+  },
+  { 
+    id: 17, 
+    name: "Mauro Popmihali", 
+    gender: "M", 
+    email: "MAURO.POPMIHALI@NTTDATA.COM", 
+    repo: "", 
+    uuid: "7q8r9s0t-1111-2222-3333-qqqqqqqqqqqq", 
+    initialsAvatar: "https://ui-avatars.com/api/?name=Mauro+Popmihali&background=random&size=128&gender=male", 
+    pictureAvatar: "https://randomuser.me/api/portraits/men/17.jpg" 
+  }
+];
+
+        // Generate student cards
+        const studentsContainer = document.getElementById('students-container');
+
+        students.forEach(student => {
+            const studentCard = document.createElement('div');
+            studentCard.classList.add('student-card');
+
+            const initialsImg = document.createElement('img');
+            initialsImg.src = student.initialsAvatar;
+            initialsImg.alt = "Initials Avatar";
+
+            const pictureImg = document.createElement('img');
+            pictureImg.className = "student-image";
+            pictureImg.src = student.pictureAvatar;
+            pictureImg.alt = "Picture Avatar";
+            pictureImg.style.display = "none"; // Initially hidden
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.innerText = student.name;
+			
+
+            studentCard.appendChild(initialsImg);
+            studentCard.appendChild(pictureImg);
+            studentCard.appendChild(tooltip);
+
+            // Show/hide images on hover
+            studentCard.addEventListener('mouseenter', () => {
+                initialsImg.style.display = "none";
+                pictureImg.style.display = "block"; // Show picture avatar on hover
+				tooltip.style.display = "block";
+            });
+
+            studentCard.addEventListener('mouseleave', () => {
+                initialsImg.style.display = "block"; // Show initials avatar back
+                pictureImg.style.display = "none"; // Hide picture avatar
+            });
+
+            studentsContainer.appendChild(studentCard);
+        });
+		
+		
+		
+		
+		const studentsWhoPresentedAlready = []; // Array to keep track of students who have presented
+
+document.getElementById('present-student-button').addEventListener('click', () => {
+    // Filter out students who have already presented
+    const availableStudents = students.filter(student => !studentsWhoPresentedAlready.includes(student));
+
+    // Check if there are any available students left
+    if (availableStudents.length === 0) {
+        alert("All students have presented already!");
+        return; // Exit if no students are left
+    }
+
+    // Select a random student from the available ones
+    const randomIndex = Math.floor(Math.random() * availableStudents.length);
+    const selectedStudent = availableStudents[randomIndex];
+
+    // Add the selected student to the studentsWhoPresentedAlready array
+    studentsWhoPresentedAlready.push(selectedStudent);
+
+    // Display the message
+    document.getElementById('presentation-message').innerText = `Acum prezinta: ${selectedStudent.name}`;
+});
+
+
+
+    </script>
+</body>
+</html>

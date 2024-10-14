@@ -521,7 +521,34 @@ document.getElementById('present-student-button').addEventListener('click', () =
 });
 
 
+let teamsGenerated = false;
 
+function generateTeams() {
+  if (teamsGenerated) return;
+
+  // Shuffle students
+  const shuffledStudents = students.sort(() => 0.5 - Math.random());
+
+  // Create 4 teams, one with 5 members
+  const teams = [
+    shuffledStudents.slice(0, 4),
+    shuffledStudents.slice(4, 8),
+    shuffledStudents.slice(8, 12),
+    shuffledStudents.slice(12, 17)
+  ];
+
+  // Display the teams in the div
+  const teamsContainer = document.getElementById('teamsContainer');
+  teams.forEach((team, index) => {
+    const teamDiv = document.createElement('div');
+    teamDiv.innerHTML = `<h3>Team ${index + 1}</h3><ul>${team.map(student => `<li>${student.name}</li>`).join('')}</ul>`;
+    teamsContainer.appendChild(teamDiv);
+  });
+
+  // Disable the button after generating teams
+  document.getElementById('generateTeamsButton').disabled = true;
+  teamsGenerated = true;
+}
     </script>
 </body>
 </html>
